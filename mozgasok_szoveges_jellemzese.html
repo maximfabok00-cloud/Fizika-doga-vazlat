@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mozgások szöveges jellemzése</title>
+<style>
+:root{
+  --paper:#f7f8fd; --grid:#c9d2ee; --ink:#1f3fa8; --red:#d13b3b; --muted:#5a6aa0;
+  --card:#ffffffcc; --line:#9fb0e0;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#151826; --grid:#262c47; --ink:#9db4ff; --red:#ff7b7b; --muted:#8f9bc8;
+    --card:#1c2034cc; --line:#4a5a99;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{
+  margin:0; padding:24px 16px 56px; color:var(--ink);
+  font:18px/1.55 "Segoe Print","Bradley Hand","Comic Sans MS",system-ui,sans-serif;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  min-height:100vh;
+}
+main{max-width:640px;margin:0 auto}
+h1{font-size:1.7rem;line-height:1.25;text-align:center;margin:8px 0 28px;font-weight:600}
+h2{font-size:1.15rem;margin:32px 0 12px;font-weight:600}
+.defs{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.defs li{background:var(--card);border-left:4px solid var(--ink);padding:10px 14px;border-radius:0 6px 6px 0}
+.defs b{text-decoration:underline;text-underline-offset:4px}
+.diagram{background:var(--card);border-radius:8px;padding:8px;margin:20px 0}
+svg{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+svg text{fill:var(--ink);font:16px "Segoe Print","Bradley Hand","Comic Sans MS",sans-serif}
+.curve{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.part{fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;opacity:.55}
+.disp{stroke:var(--red);stroke-width:2.5}
+.lead{stroke:var(--ink);stroke-width:1.2;fill:none}
+.dot{fill:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;font-size:.85rem;color:var(--muted);margin:6px 0 2px}
+.legend span::before{content:"";display:inline-block;width:18px;height:0;border-top:3px solid;margin-right:6px;vertical-align:middle}
+.l-p::before{border-color:var(--ink)}.l-u::before{border-color:var(--red);opacity:.55}.l-e::before{border-color:var(--red)}
+.taxi{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden}
+.taxi td{padding:10px 14px;border-bottom:1px solid var(--line)}
+.taxi tr:last-child td{border-bottom:0}
+.taxi td:last-child{text-align:right;white-space:nowrap}
+s{text-decoration-color:var(--red);text-decoration-thickness:2px}
+.new{color:var(--red);font-weight:600;margin-left:8px}
+.calc{background:var(--card);border-radius:8px;padding:12px 16px;margin-top:20px}
+.calc p{margin:4px 0}
+.calc u{text-underline-offset:4px;text-decoration-thickness:2px}
+.result{margin-top:28px;font-size:1.1rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Mozgások szöveges jellemzése</h1>
+
+  <h2>Fontos definíciók:</h2>
+  <ol class="defs">
+    <li><b>Pálya:</b> az a görbe, melyen a test mozgása során végig tud haladni.</li>
+    <li><b>Út:</b> a pálya azon szakasza, amelyet a test adott idő alatt bejárt.</li>
+    <li><b>Elmozdulás:</b> kezdő- és végpont közötti legrövidebb távolság, légvonal.</li>
+  </ol>
+
+  <figure class="diagram" style="margin:20px 0">
+    <svg viewBox="0 0 300 290" role="img" aria-label="Budapest és Szeged közötti pálya, út és elmozdulás szemléltetése">
+      <path class="curve" d="M150 20 C80 60 90 110 140 120"/>
+      <path class="curve" d="M140 120 C190 130 190 165 140 175"/>
+      <path class="curve" d="M140 175 C90 185 80 225 130 260"/>
+      <path class="part" d="M140 120 C190 130 190 165 140 175"/>
+      <line class="disp" x1="150" y1="20" x2="130" y2="260"/>
+      <circle class="dot" cx="150" cy="20" r="4"/>
+      <circle class="dot" cx="130" cy="260" r="4"/>
+      <text x="164" y="26">Budapest</text>
+      <text x="146" y="268">Szeged</text>
+      <text x="6" y="66">pálya</text>
+      <path class="lead" d="M58 62 L99 80"/>
+      <text x="232" y="153">út</text>
+      <path class="lead" d="M228 148 L180 147"/>
+      <text x="4" y="156">elmozdulás</text>
+      <path class="lead" d="M96 150 L137 150"/>
+    </svg>
+    <div class="legend"><span class="l-p">pálya</span><span class="l-u">út (egy szakasz)</span><span class="l-e">elmozdulás</span></div>
+  </figure>
+
+  <h2>Feladat:</h2>
+  <p style="margin:0 0 10px"><u>Taxi:</u></p>
+  <table class="taxi">
+    <tr><td>Alapdíj</td><td><s>790 Ft</s></td></tr>
+    <tr><td>Km díj</td><td><s>540 Ft/km</s><span class="new">600</span></td></tr>
+    <tr><td>Várakozási díj</td><td><s>100 Ft/min</s></td></tr>
+  </table>
+
+  <div class="calc">
+    <p>600 Ft/km</p>
+    <p>6000 km</p>
+    <p>10 m → <u>A</u></p>
+  </div>
+
+  <p class="result"><b>Elmozdulás:</b> 6 Ft.</p>
+</main>
+</body>
+</html>
